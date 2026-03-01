@@ -1,0 +1,126 @@
+================================================================================
+                    DATABASE TABLES - LSP_MVC PROJECT
+================================================================================
+
+Database Name: lspthing
+Database Host: localhost
+
+Total Tables: 5
+
+================================================================================
+
+1. TABLE: users
+   Description: Stores user information for authentication and authorization
+   
+   Columns:
+   - id                 BIGINT          PRIMARY KEY, AUTO_INCREMENT
+   - name               VARCHAR(100)    NOT NULL
+   - email              VARCHAR(100)    NOT NULL, UNIQUE
+   - password           VARCHAR(255)    NOT NULL
+   - role               VARCHAR(20)     NOT NULL, DEFAULT 'petugas'
+   - created_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
+   - updated_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+================================================================================
+
+2. TABLE: kategori_aset
+   Description: Stores asset categories
+   
+   Columns:
+   - id                 BIGINT          PRIMARY KEY, AUTO_INCREMENT
+   - nama_kategori      VARCHAR(100)    NOT NULL
+   - created_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
+   - updated_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+================================================================================
+
+3. TABLE: lokasi
+   Description: Stores location information for assets
+   
+   Columns:
+   - id                 BIGINT          PRIMARY KEY, AUTO_INCREMENT
+   - nama_lokasi        VARCHAR(100)    NOT NULL
+   - keterangan         TEXT
+   - created_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
+   - updated_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+================================================================================
+
+4. TABLE: asset
+   Description: Stores asset information
+   
+   Columns:
+   - id                 BIGINT          PRIMARY KEY, AUTO_INCREMENT
+   - kode_aset          VARCHAR(50)     NOT NULL, UNIQUE
+   - nama_aset          VARCHAR(150)    NOT NULL
+   - kategori_id        BIGINT          NOT NULL
+   - lokasi_id          BIGINT          NOT NULL
+   - kondisi            VARCHAR(30)     NOT NULL, DEFAULT 'baik'
+   - jumlah             INT             NOT NULL, DEFAULT 1
+   - created_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
+   - updated_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+   
+   Foreign Keys:
+   - kategori_id        REFERENCES kategori_aset(id) ON DELETE RESTRICT
+   - lokasi_id          REFERENCES lokasi(id) ON DELETE RESTRICT
+
+================================================================================
+
+5. TABLE: mutasi_aset
+   Description: Stores asset mutation/transfer records
+   
+   Columns:
+   - id                 BIGINT          PRIMARY KEY, AUTO_INCREMENT
+   - asset_id           BIGINT          NOT NULL
+   - lokasi_asal_id     BIGINT          NOT NULL
+   - lokasi_tujuan_id   BIGINT          NOT NULL
+   - tanggal_mutasi     DATE            NOT NULL
+   - keterangan         TEXT
+   - user_id            BIGINT          NOT NULL
+   - created_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
+   - updated_at         TIMESTAMP       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+   
+   Foreign Keys:
+   - asset_id           REFERENCES asset(id) ON DELETE RESTRICT
+   - lokasi_asal_id     REFERENCES lokasi(id) ON DELETE RESTRICT
+   - lokasi_tujuan_id   REFERENCES lokasi(id) ON DELETE RESTRICT
+   - user_id            REFERENCES users(id) ON DELETE RESTRICT
+
+================================================================================
+
+TABLE RELATIONSHIPS:
+
+1. kategori_aset (1) ----< (N) asset
+   One category can have many assets
+
+2. lokasi (1) ----< (N) asset
+   One location can have many assets
+
+3. asset (1) ----< (N) mutasi_aset
+   One asset can have many mutation records
+
+4. lokasi (1) ----< (N) mutasi_aset (as lokasi_asal_id)
+   One location can be the source of many mutations
+
+5. lokasi (1) ----< (N) mutasi_aset (as lokasi_tujuan_id)
+   One location can be the destination of many mutations
+
+6. users (1) ----< (N) mutasi_aset
+   One user can create many mutation records
+
+================================================================================
+
+MODELS AVAILABLE:
+- User_model.php         (for users table)
+- Category_model.php     (for kategori_aset table)
+- Location_model.php     (for lokasi table)
+- Asset_model.php        (for asset table)
+- Mutation_model.php     (for mutasi_aset table)
+
+================================================================================
+
+Generated: 2026-02-19
+Source: app/models/Database.php (createTables method)
+
+================================================================================
+

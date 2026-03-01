@@ -23,9 +23,9 @@ class Home extends Controller
             'total_locations' => $this->locationModel->getTotalCount(),
             'total_mutations' => $this->mutationModel->getTotalCount(),
             'recent_mutations' => $this->mutationModel->getRecentMutations(5),
+            'flash' => $this->getFlash()
         ];
 
         $this->view('home/index', $data);
     }
 }
-

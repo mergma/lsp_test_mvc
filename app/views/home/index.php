@@ -1,4 +1,5 @@
-<?php include '../templates/header.php'; ?>
+<?php include '../layouts/header.php'; ?>
+<?php include '../layouts/navbar.php'; ?>
 
 <h1>Dashboard</h1>
 <p>Welcome, <?= htmlspecialchars($_SESSION['name']) ?>!</p>
@@ -60,4 +61,4 @@
     <?php endif; ?>
 </div>
 
-<?php include '../templates/footer.php'; ?>
+<?php include '../layouts/footer.php'; ?>

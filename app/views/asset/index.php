@@ -1,4 +1,4 @@
-<?php include '../templates/header.php'; ?>
+<?php include '../layouts/header.php'; ?>
 
 <h1>Assets</h1>
 
@@ -102,4 +102,4 @@
     <?php endif; ?>
 </div>
 
-<?php include '../templates/footer.php'; ?>
+<?php include '../layouts/footer.php'; ?>

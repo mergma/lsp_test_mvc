@@ -1,4 +1,4 @@
-<?php include '../app/views/templates/header.php'; ?>
+<?php include '../layouts/header.php'; ?>
 
 <h1>Edit User</h1>
 
@@ -40,5 +40,4 @@
     </form>
 </div>
 
-<?php include '../app/views/templates/footer.php'; ?>
-
+<?php include '../layouts/footer.php'; ?>

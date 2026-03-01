@@ -1,4 +1,4 @@
-<?php include '../app/views/templates/header.php'; ?>
+<?php include '../layouts/header.php'; ?>
 
 <h1>Asset Categories</h1>
 
@@ -55,5 +55,4 @@
     <?php endif; ?>
 </div>
 
-<?php include '../app/views/templates/footer.php'; ?>
-
+<?php include '../layouts/footer.php'; ?>

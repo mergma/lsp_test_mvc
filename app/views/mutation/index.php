@@ -1,4 +1,4 @@
-<?php include '../app/views/templates/header.php'; ?>
+<?php include '../layouts/header.php'; ?>
 
 <h1>Asset Mutations</h1>
 <p>Track asset movements between locations</p>
@@ -123,5 +123,4 @@
     }
 </script>
 
-<?php include '../app/views/templates/footer.php'; ?>
-
+<?php include '../layouts/footer.php'; ?>

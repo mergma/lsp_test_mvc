@@ -27,6 +27,7 @@ class Mutation_model extends Database
 
     public function getRecentMutations($limit = 5)
     {
+        // Cast to integer to prevent SQL injection
         $limit = (int)$limit;
         $stmt = $this->con->prepare("
             SELECT m.*, a.kode_aset, a.nama_aset,

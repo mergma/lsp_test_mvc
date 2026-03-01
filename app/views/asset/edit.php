@@ -1,4 +1,4 @@
-<?php include '../app/views/templates/header.php'; ?>
+<?php include '../layouts/header.php'; ?>
 
 <h1>Edit Asset</h1>
 
@@ -14,7 +14,7 @@
 
         <div class="form-group">
             <label for="kode_aset">Asset Code</label>
-            <input type="text" id="kode_aset" value="<?= htmlspecialchars($asset['kode_aset']) ?>" 
+            <input type="text" id="kode_aset" value="<?= htmlspecialchars($asset['kode_aset']) ?>"
                 readonly style="background-color: #f0f0f0; cursor: not-allowed;">
             <small style="color: #666;">Asset code is auto-generated and cannot be changed</small>
         </div>
@@ -66,5 +66,4 @@
     </form>
 </div>
 
-<?php include '../app/views/templates/footer.php'; ?>
-
+<?php include '../layouts/footer.php'; ?>
