@@ -1,8 +1,7 @@
-<?php include '../layouts/header.php'; ?>
-<?php include '../layouts/navbar.php'; ?>
+<?php include __DIR__ . '/../layouts/header.php'; ?>
 
 <h1>Dashboard</h1>
-<p>Welcome, <?= htmlspecialchars($_SESSION['name']) ?>!</p>
+<p>Welcome, <?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>!</p>
 
 <?php if ($flash): ?>
     <div class="alert alert-<?= $flash['type'] ?>">
@@ -61,4 +60,4 @@
     <?php endif; ?>
 </div>
 
-<?php include '../layouts/footer.php'; ?>
+<?php include __DIR__ . '/../layouts/footer.php'; ?>

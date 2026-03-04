@@ -1,4 +1,4 @@
-<?php include '../layouts/header.php'; ?>
+<?php include __DIR__ . '/../layouts/header.php'; ?>
 
 <h1>Asset Mutations</h1>
 <p>Track asset movements between locations</p>
@@ -123,4 +123,4 @@
     }
 </script>
 
-<?php include '../layouts/footer.php'; ?>
+<?php include __DIR__ . '/../layouts/footer.php'; ?>

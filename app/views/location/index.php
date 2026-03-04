@@ -1,4 +1,4 @@
-<?php include '../layouts/header.php'; ?>
+<?php include __DIR__ . '/../layouts/header.php'; ?>
 
 <h1>Locations</h1>
 
@@ -62,4 +62,4 @@
     <?php endif; ?>
 </div>
 
-<?php include '../layouts/footer.php'; ?>
+<?php include __DIR__ . '/../layouts/footer.php'; ?>

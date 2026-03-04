@@ -54,7 +54,7 @@ class Controller
      * Redirect to a URL
      * @param string $url The URL to redirect to (relative to BASEURL)
      */
-    public function redirect($url)
+    public function redirect($url)  
     {
         header('Location: ' . BASEURL . $url);
         exit;
@@ -62,7 +62,7 @@ class Controller
 
     /**
      * Check if user is logged in
-     * @return bool True if user is logged in, false otherwise
+     * @return bool True if user is logged in, false otherwise}
      */
     public function isLoggedIn()
     {

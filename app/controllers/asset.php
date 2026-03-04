@@ -19,6 +19,7 @@ class Asset extends Controller
             'assets' => $this->assetModel->getAllAssets(),
             'categories' => $this->categoryModel->getAllCategories(),
             'locations' => $this->locationModel->getAllLocations(),
+            'flash' => $this->getFlash(),
         ];
 
         $this->view('asset/index', $data);
@@ -67,7 +68,7 @@ class Asset extends Controller
 
         $this->view('asset/edit', $data);
     }
-
+    
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -110,4 +111,3 @@ class Asset extends Controller
         $this->redirect('asset');
     }
 }
-
