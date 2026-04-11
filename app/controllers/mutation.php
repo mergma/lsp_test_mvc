@@ -7,6 +7,7 @@ class Mutation extends Controller
 
     public function __construct()
     {
+        $this->requireLogin(); // Any logged-in user can record mutations
         $this->mutationModel = $this->model('Mutation_model');
         $this->assetModel = $this->model('Asset_model');
         $this->locationModel = $this->model('Location_model');
@@ -70,4 +71,3 @@ class Mutation extends Controller
         $this->redirect('mutation');
     }
 }
-

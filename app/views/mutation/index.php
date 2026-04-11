@@ -9,58 +9,55 @@
     </div>
 <?php endif; ?>
 
-<div class="section">
-    <h2>Record New Mutation</h2>
-    <form method="POST" action="<?= BASEURL ?>mutation/add">
-        <div class="form-group">
-            <label for="asset_id">Asset</label>
-            <select id="asset_id" name="asset_id" required onchange="updateCurrentLocation(this.value)">
-                <option value="">Select Asset</option>
-                <?php foreach ($assets as $asset): ?>
-                    <option value="<?= $asset['id'] ?>" data-location="<?= $asset['lokasi_id'] ?>">
-                        <?= htmlspecialchars($asset['kode_aset'] . ' - ' . $asset['nama_aset']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="lokasi_asal_id">Current Location (From)</label>
-            <select id="lokasi_asal_id" name="lokasi_asal_id" required>
-                <option value="">Select Current Location</option>
-                <?php foreach ($locations as $location): ?>
-                    <option value="<?= $location['id'] ?>">
-                        <?= htmlspecialchars($location['nama_lokasi']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="lokasi_tujuan_id">New Location (To)</label>
-            <select id="lokasi_tujuan_id" name="lokasi_tujuan_id" required>
-                <option value="">Select New Location</option>
-                <?php foreach ($locations as $location): ?>
-                    <option value="<?= $location['id'] ?>">
-                        <?= htmlspecialchars($location['nama_lokasi']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="tanggal_mutasi">Mutation Date</label>
-            <input type="date" id="tanggal_mutasi" name="tanggal_mutasi" value="<?= date('Y-m-d') ?>" required>
-        </div>
-
-        <div class="form-group">
-            <label for="keterangan">Notes (Optional)</label>
-            <textarea id="keterangan" name="keterangan" rows="3"></textarea>
-        </div>
-
-        <button type="submit" class="btn">Record Mutation</button>
-    </form>
+<!-- Record Mutation Modal -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal-box">
+        <h2>Record New Mutation</h2>
+        <form method="POST" action="<?= BASEURL ?>mutation/add">
+            <div class="form-group">
+                <label for="asset_id">Asset</label>
+                <select id="asset_id" name="asset_id" required onchange="updateCurrentLocation(this.value)">
+                    <option value="">Select Asset</option>
+                    <?php foreach ($assets as $asset): ?>
+                        <option value="<?= $asset['id'] ?>" data-location="<?= $asset['lokasi_id'] ?>">
+                            <?= htmlspecialchars($asset['kode_aset'] . ' - ' . $asset['nama_aset']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="lokasi_asal_id">Current Location (From)</label>
+                <select id="lokasi_asal_id" name="lokasi_asal_id" required>
+                    <option value="">Select Current Location</option>
+                    <?php foreach ($locations as $location): ?>
+                        <option value="<?= $location['id'] ?>"><?= htmlspecialchars($location['nama_lokasi']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="lokasi_tujuan_id">New Location (To)</label>
+                <select id="lokasi_tujuan_id" name="lokasi_tujuan_id" required>
+                    <option value="">Select New Location</option>
+                    <?php foreach ($locations as $location): ?>
+                        <option value="<?= $location['id'] ?>"><?= htmlspecialchars($location['nama_lokasi']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tanggal_mutasi">Mutation Date</label>
+                <input type="date" id="tanggal_mutasi" name="tanggal_mutasi" value="<?= date('Y-m-d') ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="keterangan">Notes (Optional)</label>
+                <textarea id="keterangan" name="keterangan" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn">Record Mutation</button>
+        </form>
+    </div>
 </div>
+
+<!-- Floating Action Button -->
+<button class="fab" id="fabBtn" onclick="toggleModal()" title="Record New Mutation">+</button>
 
 <div class="section">
     <h2>Mutation History</h2>
@@ -99,16 +96,25 @@
 </div>
 
 <script>
+    function toggleModal() {
+        const overlay = document.getElementById('addModal');
+        const fab = document.getElementById('fabBtn');
+        overlay.classList.toggle('active');
+        fab.classList.toggle('fab-open');
+        fab.textContent = fab.classList.contains('fab-open') ? '×' : '+';
+    }
+    document.getElementById('addModal').addEventListener('click', function(e) {
+        if (e.target === this) toggleModal();
+    });
+
     function updateCurrentLocation(assetId) {
         if (!assetId) {
             document.getElementById('lokasi_asal_id').value = '';
             return;
         }
-
         const select = document.getElementById('asset_id');
         const selectedOption = select.options[select.selectedIndex];
         const locationId = selectedOption.getAttribute('data-location');
-
         if (locationId) {
             document.getElementById('lokasi_asal_id').value = locationId;
         }

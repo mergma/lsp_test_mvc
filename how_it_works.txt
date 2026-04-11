@@ -1,0 +1,132 @@
+﻿PENJELASAN ALUR MVC & PBO
+- Alur MVC:
+1. View: User melakukan "permintaan (request)" melalui
+view, contohnya seperti user yang mengklik tombol
+"Add Asset" pada form di halaman asset.
+
+2. Router (App): Request diterima oleh public/index.php
+lalu diteruskan ke app/core/App.php yang mem-parsing URL
+(misal: asset/add) untuk menentukan controller dan method
+yang akan dipanggil.
+
+3. Controller: app/core/App.php memanggil method yang sesuai
+pada controller (misal: Asset::add()). Controller menerima
+data dari view, memvalidasinya, lalu meneruskan ke Model.
+
+4. Model: Model menerima perintah dari Controller, menjalankan
+query ke database, lalu mengembalikan hasilnya ke Controller
+yang kemudian meneruskannya ke view.
+
+5. Contoh:
+app/views/asset/index.php: Disini terdapat form dengan
+action BASEURL.'asset/add' yang mengirim data POST ke controller.
+
+app/core/App.php: Disini URL di-parse, controller Asset
+diinstansiasi, dan method add() dipanggil.
+
+app/controllers/asset.php: Disini controller menerima data
+dari view, memvalidasi, lalu memanggil method model.
+
+app/models/Asset_model.php: Disini model menerima perintah
+dari controller untuk dijalankan ke database dan hasilnya
+dikembalikan ke controller lalu ke view.
+
+- PBO:
+1. Kode:
+<?php
+class Asset extends Controller
+{
+    private $assetModel;
+    private $categoryModel;
+    private $locationModel;
+
+    public function __construct()
+    {
+        $this->assetModel    = $this->model('Asset_model');
+        $this->categoryModel = $this->model('Category_model');
+        $this->locationModel = $this->model('Location_model');
+    }
+
+    public function index()  { ... }
+    public function add()    { ... }
+    public function edit($id){ ... }
+    public function update() { ... }
+    public function delete() { ... }
+}
+
+1. Enkapsulasi: Merupakan pembungkusan method dan data dalam
+satu class. Contohnya class Asset yang membungkus property
+$assetModel, $categoryModel, $locationModel serta method
+index, add, edit, update, delete di dalamnya.
+
+2. Inheritance: Class yang mewarisi sifat dari class lainnya.
+Pada contoh di atas class Asset mewarisi semua method dan
+properti dari class Controller. Hal ini terlihat pada penggunaan
+$this->model(), $this->view(), $this->redirect(),
+$this->setFlash(), dan $this->requireAdmin() — semua method
+tersebut didefinisikan di class Controller (app/core/Controller.php).
+Isi class Controller.php (sebagian):
+class Controller
+{
+    public function requireAdmin()
+    {
+        if (!$this->isLoggedIn()) {
+            $this->redirect('auth/login');
+        }
+        if ($_SESSION['role'] !== 'admin') {
+            $this->setFlash('error', 'You do not have permission');
+            $this->redirect('');
+        }
+    }
+}
+
+3. Abstraksi: Menyembunyikan detail implementasi dan hanya
+menampilkan fungsi penting. Contohnya:
+$this->view('asset/index', $data);
+Pemanggilan ini menyembunyikan detail pencarian file view,
+ekstraksi data, dan require_once di baliknya.
+Contoh lain:
+$this->assetModel = $this->model('Asset_model');
+Menyembunyikan proses require_once file model dan
+instansiasi object-nya.
+
+4. Polymorphism: Method dengan nama sama tapi perilaku berbeda
+pada class yang berbeda. Contohnya class Asset dan class
+Category keduanya extends Controller dan masing-masing
+memiliki method delete() namun isi method-nya berbeda.
+
+Kode Asset (app/controllers/asset.php):
+    public function delete()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['id'] ?? 0;
+            if ($id) {
+                if ($this->assetModel->deleteAsset($id)) {
+                    $this->setFlash('success', 'Asset deleted successfully');
+                } else {
+                    $this->setFlash('error', 'Failed to delete asset');
+                }
+            }
+        }
+        $this->redirect('asset');
+    }
+
+Kode Category (app/controllers/category.php):
+    public function delete()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['id'] ?? 0;
+            if ($id) {
+                if ($this->categoryModel->deleteCategory($id)) {
+                    $this->setFlash('success', 'Category deleted successfully');
+                } else {
+                    $this->setFlash('error', 'Failed to delete category');
+                }
+            }
+        }
+        $this->redirect('category');
+    }
+
+Kedua method delete() memiliki nama yang sama namun memanggil
+model yang berbeda (assetModel vs categoryModel) dan me-redirect
+ke halaman yang berbeda (asset vs category).

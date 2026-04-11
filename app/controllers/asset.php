@@ -7,6 +7,7 @@ class Asset extends Controller
 
     public function __construct()
     {
+        $this->requireAdmin();
         $this->assetModel = $this->model('Asset_model');
         $this->categoryModel = $this->model('Category_model');
         $this->locationModel = $this->model('Location_model');
@@ -68,7 +69,7 @@ class Asset extends Controller
 
         $this->view('asset/edit', $data);
     }
-    
+
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

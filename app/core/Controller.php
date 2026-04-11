@@ -54,7 +54,7 @@ class Controller
      * Redirect to a URL
      * @param string $url The URL to redirect to (relative to BASEURL)
      */
-    public function redirect($url)  
+    public function redirect($url)
     {
         header('Location: ' . BASEURL . $url);
         exit;
@@ -67,6 +67,16 @@ class Controller
     public function isLoggedIn()
     {
         return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+    }
+
+    /**
+     * Require user to be logged in, redirect to login if not
+     */
+    public function requireLogin()
+    {
+        if (!$this->isLoggedIn()) {
+            $this->redirect('auth/login');
+        }
     }
 
     /**

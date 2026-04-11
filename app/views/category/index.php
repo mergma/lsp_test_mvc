@@ -8,17 +8,35 @@
     </div>
 <?php endif; ?>
 
-<div class="section">
-    <h2>Add New Category</h2>
-    <form method="POST" action="<?= BASEURL ?>category/add">
-        <div class="form-group">
-            <label for="nama_kategori">Category Name</label>
-            <input type="text" id="nama_kategori" name="nama_kategori" required>
-        </div>
-
-        <button type="submit" class="btn">Add Category</button>
-    </form>
+<!-- Add Category Modal -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal-box">
+        <h2>Add New Category</h2>
+        <form method="POST" action="<?= BASEURL ?>category/add">
+            <div class="form-group">
+                <label for="nama_kategori">Category Name</label>
+                <input type="text" id="nama_kategori" name="nama_kategori" required>
+            </div>
+            <button type="submit" class="btn">Add Category</button>
+        </form>
+    </div>
 </div>
+
+<!-- Floating Action Button -->
+<button class="fab" id="fabBtn" onclick="toggleModal()" title="Add New Category">+</button>
+
+<script>
+    function toggleModal() {
+        const overlay = document.getElementById('addModal');
+        const fab = document.getElementById('fabBtn');
+        overlay.classList.toggle('active');
+        fab.classList.toggle('fab-open');
+        fab.textContent = fab.classList.contains('fab-open') ? '×' : '+';
+    }
+    document.getElementById('addModal').addEventListener('click', function(e) {
+        if (e.target === this) toggleModal();
+    });
+</script>
 
 <div class="section">
     <h2>All Categories</h2>
@@ -51,7 +69,7 @@
             </tbody>
         </table>
     <?php else: ?>
-        <p>No categories found. Add one above!</p>
+        <p>No categories found. Click the <strong>+</strong> button to add one!</p>
     <?php endif; ?>
 </div>
 

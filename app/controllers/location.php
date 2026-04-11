@@ -5,6 +5,7 @@ class Location extends Controller
 
     public function __construct()
     {
+        $this->requireAdmin();
         $this->locationModel = $this->model('Location_model');
     }
 
@@ -96,4 +97,3 @@ class Location extends Controller
         $this->redirect('location');
     }
 }
-

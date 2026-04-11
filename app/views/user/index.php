@@ -8,35 +8,54 @@
     </div>
 <?php endif; ?>
 
-<div class="section">
-    <h2>Add New User</h2>
-    <form method="POST" action="<?= BASEURL ?>user/add">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" placeholder="Enter full name" required>
+<!-- Add User Modal -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal-box">
+        <h2>Add New User</h2>
+        <form method="POST" action="<?= BASEURL ?>user/add">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter email address" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter email address" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Min. 6 characters" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" required>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Min. 6 characters" required>
-            </div>
-            <div class="form-group">
-                <label for="role">Role</label>
-                <select id="role" name="role" required>
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
-        </div>
-        <button type="submit" class="btn">Add User</button>
-    </form>
+            <button type="submit" class="btn">Add User</button>
+        </form>
+    </div>
 </div>
+
+<!-- Floating Action Button -->
+<button class="fab" id="fabBtn" onclick="toggleModal()" title="Add New User">+</button>
+
+<script>
+    function toggleModal() {
+        const overlay = document.getElementById('addModal');
+        const fab = document.getElementById('fabBtn');
+        overlay.classList.toggle('active');
+        fab.classList.toggle('fab-open');
+        fab.textContent = fab.classList.contains('fab-open') ? '×' : '+';
+    }
+    document.getElementById('addModal').addEventListener('click', function(e) {
+        if (e.target === this) toggleModal();
+    });
+</script>
 
 <div class="section">
     <h2>All Users</h2>

@@ -8,56 +8,69 @@
     </div>
 <?php endif; ?>
 
-<div class="section">
-    <h2>Add New Asset</h2>
-    <form method="POST" action="<?= BASEURL ?>asset/add">
-        <div class="form-group">
-            <label>Asset Code</label>
-            <input type="text" value="Auto-generated (AST-XXX)" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
-            <small style="color: #666;">Asset code will be automatically generated</small>
-        </div>
-
-        <div class="form-group">
-            <label for="nama_aset">Asset Name</label>
-            <input type="text" id="nama_aset" name="nama_aset" required>
-        </div>
-
-        <div class="form-group">
-            <label for="kategori_id">Category</label>
-            <select id="kategori_id" name="kategori_id" required>
-                <option value="">Select Category</option>
-                <?php foreach ($categories as $category): ?>
-                    <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['nama_kategori']) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="lokasi_id">Location</label>
-            <select id="lokasi_id" name="lokasi_id" required>
-                <option value="">Select Location</option>
-                <?php foreach ($locations as $location): ?>
-                    <option value="<?= $location['id'] ?>"><?= htmlspecialchars($location['nama_lokasi']) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="kondisi">Condition</label>
-            <select id="kondisi" name="kondisi" required>
-                <option value="baik">Baik (Good)</option>
-                <option value="rusak">Rusak (Damaged)</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="jumlah">Quantity</label>
-            <input type="number" id="jumlah" name="jumlah" min="1" value="1" required>
-        </div>
-
-        <button type="submit" class="btn">Add Asset</button>
-    </form>
+<!-- Add Asset Modal -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal-box">
+        <h2>Add New Asset</h2>
+        <form method="POST" action="<?= BASEURL ?>asset/add">
+            <div class="form-group">
+                <label>Asset Code</label>
+                <input type="text" value="Auto-generated (AST-XXX)" readonly>
+                <small>Asset code will be automatically generated</small>
+            </div>
+            <div class="form-group">
+                <label for="nama_aset">Asset Name</label>
+                <input type="text" id="nama_aset" name="nama_aset" required>
+            </div>
+            <div class="form-group">
+                <label for="kategori_id">Category</label>
+                <select id="kategori_id" name="kategori_id" required>
+                    <option value="">Select Category</option>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?= $category['id'] ?>"><?= htmlspecialchars($category['nama_kategori']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="lokasi_id">Location</label>
+                <select id="lokasi_id" name="lokasi_id" required>
+                    <option value="">Select Location</option>
+                    <?php foreach ($locations as $location): ?>
+                        <option value="<?= $location['id'] ?>"><?= htmlspecialchars($location['nama_lokasi']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="kondisi">Condition</label>
+                <select id="kondisi" name="kondisi" required>
+                    <option value="baik">Baik (Good)</option>
+                    <option value="rusak">Rusak (Damaged)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="jumlah">Quantity</label>
+                <input type="number" id="jumlah" name="jumlah" min="1" value="1" required>
+            </div>
+            <button type="submit" class="btn">Add Asset</button>
+        </form>
+    </div>
 </div>
+
+<!-- Floating Action Button -->
+<button class="fab" id="fabBtn" onclick="toggleModal()" title="Add New Asset">+</button>
+
+<script>
+    function toggleModal() {
+        const overlay = document.getElementById('addModal');
+        const fab = document.getElementById('fabBtn');
+        overlay.classList.toggle('active');
+        fab.classList.toggle('fab-open');
+        fab.textContent = fab.classList.contains('fab-open') ? '×' : '+';
+    }
+    document.getElementById('addModal').addEventListener('click', function(e) {
+        if (e.target === this) toggleModal();
+    });
+</script>
 
 <div class="section">
     <h2>All Assets</h2>
@@ -98,7 +111,7 @@
             </tbody>
         </table>
     <?php else: ?>
-        <p>No assets found. Add one above!</p>
+        <p>No assets found. Click the <strong>+</strong> button to add one!</p>
     <?php endif; ?>
 </div>
 

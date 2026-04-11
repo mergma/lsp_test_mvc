@@ -8,22 +8,39 @@
     </div>
 <?php endif; ?>
 
-<div class="section">
-    <h2>Add New Location</h2>
-    <form method="POST" action="<?= BASEURL ?>location/add">
-        <div class="form-group">
-            <label for="nama_lokasi">Location Name</label>
-            <input type="text" id="nama_lokasi" name="nama_lokasi" required>
-        </div>
-
-        <div class="form-group">
-            <label for="keterangan">Description (Optional)</label>
-            <textarea id="keterangan" name="keterangan" rows="3"></textarea>
-        </div>
-
-        <button type="submit" class="btn">Add Location</button>
-    </form>
+<!-- Add Location Modal -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal-box">
+        <h2>Add New Location</h2>
+        <form method="POST" action="<?= BASEURL ?>location/add">
+            <div class="form-group">
+                <label for="nama_lokasi">Location Name</label>
+                <input type="text" id="nama_lokasi" name="nama_lokasi" required>
+            </div>
+            <div class="form-group">
+                <label for="keterangan">Description (Optional)</label>
+                <textarea id="keterangan" name="keterangan" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn">Add Location</button>
+        </form>
+    </div>
 </div>
+
+<!-- Floating Action Button -->
+<button class="fab" id="fabBtn" onclick="toggleModal()" title="Add New Location">+</button>
+
+<script>
+    function toggleModal() {
+        const overlay = document.getElementById('addModal');
+        const fab = document.getElementById('fabBtn');
+        overlay.classList.toggle('active');
+        fab.classList.toggle('fab-open');
+        fab.textContent = fab.classList.contains('fab-open') ? '×' : '+';
+    }
+    document.getElementById('addModal').addEventListener('click', function(e) {
+        if (e.target === this) toggleModal();
+    });
+</script>
 
 <div class="section">
     <h2>All Locations</h2>
@@ -58,7 +75,7 @@
             </tbody>
         </table>
     <?php else: ?>
-        <p>No locations found. Add one above!</p>
+        <p>No locations found. Click the <strong>+</strong> button to add one!</p>
     <?php endif; ?>
 </div>
 

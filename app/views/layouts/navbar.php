@@ -5,9 +5,11 @@
     <nav class="sidebar-nav">
         <ul>
             <li><a href="<?= BASEURL ?>">Dashboard</a></li>
-            <li><a href="<?= BASEURL ?>asset">Assets</a></li>
-            <li><a href="<?= BASEURL ?>category">Categories</a></li>
-            <li><a href="<?= BASEURL ?>location">Locations</a></li>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
+                <li><a href="<?= BASEURL ?>asset">Assets</a></li>
+                <li><a href="<?= BASEURL ?>category">Categories</a></li>
+                <li><a href="<?= BASEURL ?>location">Locations</a></li>
+            <?php endif; ?>
             <li><a href="<?= BASEURL ?>mutation">Mutations</a></li>
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
                 <li><a href="<?= BASEURL ?>user">Users</a></li>

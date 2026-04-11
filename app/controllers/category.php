@@ -5,6 +5,7 @@ class Category extends Controller
 
     public function __construct()
     {
+        $this->requireAdmin();
         $this->categoryModel = $this->model('Category_model');
     }
 
@@ -90,4 +91,3 @@ class Category extends Controller
         $this->redirect('category');
     }
 }
-

@@ -28,9 +28,9 @@
             </div>
             <button type="submit" class="btn">Login</button>
         </form>
-        <div class="auth-link">
-            Don't have an account? <a href="<?= BASEURL ?>auth/register">Register here</a>
-        </div>
+        <!-- <div class="auth-link">
+            Don't have an account? <a href="auth/register">Register here</a>
+        </div> -->
     </div>
 </body>
 
