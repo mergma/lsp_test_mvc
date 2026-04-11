@@ -21,10 +21,25 @@ class Location_model extends Database
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function generateLocationCode()
+    {
+        $stmt = $this->con->query("SELECT kode_lokasi FROM lokasi WHERE kode_lokasi IS NOT NULL ORDER BY id DESC LIMIT 1");
+        $last = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($last && preg_match('/LK-(\d+)/', $last['kode_lokasi'], $matches)) {
+            $number = intval($matches[1]) + 1;
+        } else {
+            $number = 1;
+        }
+
+        return 'LK-' . str_pad($number, 3, '0', STR_PAD_LEFT);
+    }
+
     public function createLocation($data)
     {
-        $stmt = $this->con->prepare("INSERT INTO lokasi (nama_lokasi, keterangan) VALUES (?, ?)");
-        return $stmt->execute([$data['nama_lokasi'], $data['keterangan'] ?? '']);
+        $kode_lokasi = $this->generateLocationCode();
+        $stmt = $this->con->prepare("INSERT INTO lokasi (kode_lokasi, nama_lokasi, keterangan) VALUES (?, ?, ?)");
+        return $stmt->execute([$kode_lokasi, $data['nama_lokasi'], $data['keterangan'] ?? '']);
     }
 
     public function updateLocation($id, $data)

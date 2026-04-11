@@ -64,7 +64,7 @@ class Auth extends Controller
                         'name' => $name,
                         'email' => $email,
                         'password' => $password,
-                        'role' => 'petugas'
+                        'role' => 'user'
                     ];
 
                     if ($this->userModel->createUser($userData)) {
@@ -94,4 +94,3 @@ class Auth extends Controller
         $this->redirect('auth/login');
     }
 }
-

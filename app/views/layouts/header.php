@@ -9,5 +9,6 @@
 </head>
 
 <body>
-    <?php include __DIR__ . '/navbar.php'; ?>
-    <div class="container">
+    <div class="layout">
+        <?php include __DIR__ . '/navbar.php'; ?>
+        <main class="main-content">

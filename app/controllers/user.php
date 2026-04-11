@@ -27,7 +27,7 @@ class User extends Controller
                 'name' => $_POST['name'] ?? '',
                 'email' => $_POST['email'] ?? '',
                 'password' => $_POST['password'] ?? '',
-                'role' => $_POST['role'] ?? 'petugas'
+                'role' => $_POST['role'] ?? 'user'
             ];
 
             if (!empty($userData['name']) && !empty($userData['email']) && !empty($userData['password'])) {
@@ -74,7 +74,7 @@ class User extends Controller
                 'name' => $_POST['name'] ?? '',
                 'email' => $_POST['email'] ?? '',
                 'password' => $_POST['password'] ?? '',
-                'role' => $_POST['role'] ?? 'petugas'
+                'role' => $_POST['role'] ?? 'user'
             ];
 
             if ($id && !empty($userData['name']) && !empty($userData['email'])) {
@@ -101,7 +101,7 @@ class User extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id = $_POST['id'] ?? 0;
-            
+
             // Prevent deleting yourself
             if ($id == $_SESSION['user_id']) {
                 $this->setFlash('error', 'You cannot delete your own account');
@@ -117,4 +117,3 @@ class User extends Controller
         $this->redirect('user');
     }
 }
-

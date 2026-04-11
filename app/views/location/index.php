@@ -31,7 +31,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Location Code</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Created At</th>
@@ -41,7 +41,7 @@
             <tbody>
                 <?php foreach ($locations as $location): ?>
                     <tr>
-                        <td><?= $location['id'] ?></td>
+                        <td><?= htmlspecialchars($location['kode_lokasi'] ?? '-') ?></td>
                         <td><?= htmlspecialchars($location['nama_lokasi']) ?></td>
                         <td><?= htmlspecialchars($location['keterangan'] ?? '-') ?></td>
                         <td><?= date('Y-m-d H:i', strtotime($location['created_at'])) ?></td>

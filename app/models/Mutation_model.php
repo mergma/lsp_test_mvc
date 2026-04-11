@@ -64,13 +64,29 @@ class Mutation_model extends Database
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function generateMutationCode()
+    {
+        $stmt = $this->con->query("SELECT kode_mutasi FROM mutasi_aset WHERE kode_mutasi IS NOT NULL ORDER BY id DESC LIMIT 1");
+        $last = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($last && preg_match('/MT-(\d+)/', $last['kode_mutasi'], $matches)) {
+            $number = intval($matches[1]) + 1;
+        } else {
+            $number = 1;
+        }
+
+        return 'MT-' . str_pad($number, 3, '0', STR_PAD_LEFT);
+    }
+
     public function createMutation($data)
     {
+        $kode_mutasi = $this->generateMutationCode();
         $stmt = $this->con->prepare("
-            INSERT INTO mutasi_aset (asset_id, lokasi_asal_id, lokasi_tujuan_id, tanggal_mutasi, keterangan, user_id) 
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO mutasi_aset (kode_mutasi, asset_id, lokasi_asal_id, lokasi_tujuan_id, tanggal_mutasi, keterangan, user_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
         return $stmt->execute([
+            $kode_mutasi,
             $data['asset_id'],
             $data['lokasi_asal_id'],
             $data['lokasi_tujuan_id'],

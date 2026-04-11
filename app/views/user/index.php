@@ -11,29 +11,29 @@
 <div class="section">
     <h2>Add New User</h2>
     <form method="POST" action="<?= BASEURL ?>user/add">
-        <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" required>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter full name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter email address" required>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Min. 6 characters" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-
-        <div class="form-group">
-            <label for="role">Role</label>
-            <select id="role" name="role" required>
-                <option value="petugas">Petugas (Staff)</option>
-                <option value="admin">Admin</option>
-            </select>
-        </div>
-
         <button type="submit" class="btn">Add User</button>
     </form>
 </div>
@@ -44,30 +44,37 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>User Code</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
-                    <th>Created At</th>
+                    <th>Created</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($users as $user): ?>
                     <tr>
-                        <td><?= $user['id'] ?></td>
+                        <td><?= htmlspecialchars($user['kode_user'] ?? '-') ?></td>
                         <td><?= htmlspecialchars($user['name']) ?></td>
                         <td><?= htmlspecialchars($user['email']) ?></td>
-                        <td><?= htmlspecialchars($user['role']) ?></td>
-                        <td><?= date('Y-m-d H:i', strtotime($user['created_at'])) ?></td>
                         <td>
+                            <?php $role = $user['role']; ?>
+                            <span class="badge badge-<?= $role === 'admin' ? 'admin' : 'user' ?>">
+                                <?= ucfirst($role === 'petugas' ? 'user' : $role) ?>
+                            </span>
+                        </td>
+                        <td><?= date('d M Y', strtotime($user['created_at'])) ?></td>
+                        <td class="action-cell">
                             <a href="<?= BASEURL ?>user/edit/<?= $user['id'] ?>" class="btn btn-small">Edit</a>
                             <?php if ($user['id'] != $_SESSION['user_id']): ?>
                                 <form method="POST" action="<?= BASEURL ?>user/delete" style="display:inline;"
-                                    onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                    onsubmit="return confirm('Delete <?= htmlspecialchars($user['name']) ?>? This cannot be undone.');">
                                     <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                     <button type="submit" class="btn btn-danger btn-small">Delete</button>
                                 </form>
+                            <?php else: ?>
+                                <span class="current-user-tag">You</span>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -75,7 +82,7 @@
             </tbody>
         </table>
     <?php else: ?>
-        <p>No users found.</p>
+        <p style="color:#888;">No users found.</p>
     <?php endif; ?>
 </div>
 

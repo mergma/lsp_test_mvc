@@ -68,7 +68,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Mutation Code</th>
                     <th>Asset Code</th>
                     <th>Asset Name</th>
                     <th>From Location</th>
@@ -76,13 +76,12 @@
                     <th>Date</th>
                     <th>Notes</th>
                     <th>Recorded By</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($mutations as $mutation): ?>
                     <tr>
-                        <td><?= $mutation['id'] ?></td>
+                        <td><?= htmlspecialchars($mutation['kode_mutasi'] ?? '-') ?></td>
                         <td><?= htmlspecialchars($mutation['kode_aset']) ?></td>
                         <td><?= htmlspecialchars($mutation['nama_aset']) ?></td>
                         <td><?= htmlspecialchars($mutation['lokasi_asal']) ?></td>
@@ -90,13 +89,6 @@
                         <td><?= date('Y-m-d', strtotime($mutation['tanggal_mutasi'])) ?></td>
                         <td><?= htmlspecialchars($mutation['keterangan'] ?? '-') ?></td>
                         <td><?= htmlspecialchars($mutation['user_name']) ?></td>
-                        <td>
-                            <form method="POST" action="<?= BASEURL ?>mutation/delete" style="display:inline;"
-                                onsubmit="return confirm('Are you sure you want to delete this mutation record?');">
-                                <input type="hidden" name="id" value="<?= $mutation['id'] ?>">
-                                <button type="submit" class="btn btn-danger btn-small">Delete</button>
-                            </form>
-                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

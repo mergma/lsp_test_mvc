@@ -30,7 +30,7 @@
         <div class="form-group">
             <label for="role">Role</label>
             <select id="role" name="role" required>
-                <option value="petugas" <?= $user['role'] == 'petugas' ? 'selected' : '' ?>>Petugas (Staff)</option>
+                <option value="user" <?= in_array($user['role'], ['user', 'petugas']) ? 'selected' : '' ?>>User</option>
                 <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : '' ?>>Admin</option>
             </select>
         </div>

@@ -28,7 +28,7 @@ class Database
                 name VARCHAR(100) NOT NULL,
                 email VARCHAR(100) NOT NULL UNIQUE,
                 password VARCHAR(255) NOT NULL,
-                role VARCHAR(20) NOT NULL DEFAULT 'petugas',
+                role VARCHAR(20) NOT NULL DEFAULT 'user',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )");
@@ -81,9 +81,77 @@ class Database
                 FOREIGN KEY (lokasi_tujuan_id) REFERENCES lokasi(id) ON DELETE RESTRICT,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT
             )");
+            $this->addColumnIfNotExists('users',       'kode_user',   "VARCHAR(20) DEFAULT NULL");
+            $this->addColumnIfNotExists('lokasi',       'kode_lokasi', "VARCHAR(20) DEFAULT NULL");
+            $this->addColumnIfNotExists('mutasi_aset',  'kode_mutasi', "VARCHAR(20) DEFAULT NULL");
+            $this->seedDefaultAdmin();
+            $this->backfillCodes();
         } catch (PDOException $e) {
             die("Table creation failed: " . $e->getMessage());
         }
+    }
+
+    private function addColumnIfNotExists(string $table, string $column, string $definition): void
+    {
+        $stmt = $this->con->prepare(
+            "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?"
+        );
+        $stmt->execute([$table, $column]);
+        if ((int)$stmt->fetchColumn() === 0) {
+            $this->con->exec("ALTER TABLE `{$table}` ADD COLUMN `{$column}` {$definition}");
+        }
+    }
+
+    private function backfillCodes(): void
+    {
+        // Users without a code
+        $stmt = $this->con->query("SELECT MAX(CAST(SUBSTRING(kode_user, 4) AS UNSIGNED)) FROM users WHERE kode_user IS NOT NULL");
+        $max = (int)$stmt->fetchColumn();
+        $rows = $this->con->query("SELECT id FROM users WHERE kode_user IS NULL ORDER BY id")->fetchAll(PDO::FETCH_COLUMN);
+        foreach ($rows as $id) {
+            $max++;
+            $this->con->prepare("UPDATE users SET kode_user = ? WHERE id = ?")
+                ->execute(['US-' . str_pad($max, 3, '0', STR_PAD_LEFT), $id]);
+        }
+
+        // Locations without a code
+        $stmt = $this->con->query("SELECT MAX(CAST(SUBSTRING(kode_lokasi, 4) AS UNSIGNED)) FROM lokasi WHERE kode_lokasi IS NOT NULL");
+        $max = (int)$stmt->fetchColumn();
+        $rows = $this->con->query("SELECT id FROM lokasi WHERE kode_lokasi IS NULL ORDER BY id")->fetchAll(PDO::FETCH_COLUMN);
+        foreach ($rows as $id) {
+            $max++;
+            $this->con->prepare("UPDATE lokasi SET kode_lokasi = ? WHERE id = ?")
+                ->execute(['LK-' . str_pad($max, 3, '0', STR_PAD_LEFT), $id]);
+        }
+
+        // Mutations without a code
+        $stmt = $this->con->query("SELECT MAX(CAST(SUBSTRING(kode_mutasi, 4) AS UNSIGNED)) FROM mutasi_aset WHERE kode_mutasi IS NOT NULL");
+        $max = (int)$stmt->fetchColumn();
+        $rows = $this->con->query("SELECT id FROM mutasi_aset WHERE kode_mutasi IS NULL ORDER BY id")->fetchAll(PDO::FETCH_COLUMN);
+        foreach ($rows as $id) {
+            $max++;
+            $this->con->prepare("UPDATE mutasi_aset SET kode_mutasi = ? WHERE id = ?")
+                ->execute(['MT-' . str_pad($max, 3, '0', STR_PAD_LEFT), $id]);
+        }
+    }
+
+    private function seedDefaultAdmin()
+    {
+        // Only insert if no admin account exists yet
+        $stmt = $this->con->query("SELECT COUNT(*) FROM users WHERE role = 'admin'");
+        if ($stmt->fetchColumn() > 0) {
+            return;
+        }
+
+        $stmt = $this->con->prepare(
+            "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'admin')"
+        );
+        $stmt->execute([
+            'Administrator',
+            'admin@admin.com',
+            password_hash('admin123', PASSWORD_DEFAULT)
+        ]);
     }
 
     public function getConnection()
@@ -91,4 +159,3 @@ class Database
         return $this->con;
     }
 }
-

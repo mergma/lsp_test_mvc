@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Asset Information System</title>
     <link rel="stylesheet" href="<?= BASEURL ?>css/auth.css">
 </head>
+
 <body>
     <div class="auth-container">
-        <h1>Asset Information System</h1>
+        <div class="auth-logo">
+            <img src="<?= BASEURL ?>img/Breabm 2.0.png" alt="Breabm Logo">
+        </div>
+        <h1>Breabm Management System</h1>
         <?php if (isset($error)): ?>
             <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
@@ -28,5 +33,5 @@
         </div>
     </div>
 </body>
-</html>
 
+</html>

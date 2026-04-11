@@ -28,14 +28,30 @@ class User_model extends Database
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function generateUserCode()
+    {
+        $stmt = $this->con->query("SELECT kode_user FROM users WHERE kode_user IS NOT NULL ORDER BY id DESC LIMIT 1");
+        $last = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($last && preg_match('/US-(\d+)/', $last['kode_user'], $matches)) {
+            $number = intval($matches[1]) + 1;
+        } else {
+            $number = 1;
+        }
+
+        return 'US-' . str_pad($number, 3, '0', STR_PAD_LEFT);
+    }
+
     public function createUser($data)
     {
-        $stmt = $this->con->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+        $kode_user = $this->generateUserCode();
+        $stmt = $this->con->prepare("INSERT INTO users (kode_user, name, email, password, role) VALUES (?, ?, ?, ?, ?)");
         return $stmt->execute([
+            $kode_user,
             $data['name'],
             $data['email'],
             password_hash($data['password'], PASSWORD_DEFAULT),
-            $data['role'] ?? 'petugas'
+            $data['role'] ?? 'user'
         ]);
     }
 
